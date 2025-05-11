@@ -1,118 +1,108 @@
-import Image from 'next/image';
-import { ImageWithSizeOverlay } from './image-with-size-overlay';
+import Link from 'next/link';
+import { Card } from 'components/card';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';
 import { getNetlifyContext } from 'utils';
+import { Footer } from '../components/footer';
+import { Header } from '../components/header';
 
 export const metadata = {
-    title: 'Image CDN'
+    title: {
+        template: '%s | GBTS BUILDERS',
+        default: 'Welcome to GBTS BUILDERS'
+    }
 };
 
-const sampleImage = '/images/corgi.jpg';
+const contextExplainer = `
+Explore the features of GBTS BUILDERS SOLUTION LTD's e-commerce platform. Easily navigate through our extensive collection of building materials and tools.
+`;
+
+const navigationItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'Collections', href: '/collections', submenu: [
+        { name: 'Roofings', href: '/collections/roofings' },
+        { name: 'Doors', href: '/collections/doors' },
+        { name: 'Hand Tools', href: '/collections/hand-tools' },
+        { name: 'Locks & Knobs', href: '/collections/locks-knobs' },
+        { name: 'Security Cameras', href: '/collections/security-cameras' },
+        { name: 'Appliances', href: '/collections/appliances' },
+    ]},
+    { name: 'Track Your Orders', href: '/orders' },
+    { name: 'Blog', href: '/blog' },
+];
 
 const ctx = getNetlifyContext();
-const forceWebP = ctx === 'dev';
-const sampleImageSrcSet = [640, 1280, 2048]
-    .map((size) => {
-        return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
-    })
-    .join(', ');
-
-const nextImageSnippet = `
-When running on Netlify, \`next/image\` is automatically set-up to use Netlify Image CDN for optimized images.
-
-~~~jsx
-import Image from 'next/image';
-
-// In your component
-<Image src="/images/corgi.jpg" alt="Corgi" /* ... additional props */ />
-~~~
-`;
-
-const originalVsCdnSnippet = `
-In the code below, a regular \`<img>\` tag is used in both cases for a framework-agnostic example. 
-Other than using \`next/image\` or rolling your own \`<img>\` tags, you can also use the excellent [unpic-img](https://unpic.pics/).
-
-~~~jsx
-// <== On the left, the original image
-<img src="/images/corgi.jpg" alt="Corgi" />
-
-// ==> On the right, explicitly using Netlify Image CDN endpoint for a responsive image
-<img 
-  srcSet="/.netlify/images?url=images/corgi.jpg&w=640 640w, /.netlify/images?url=images/corgi.jpg&w=1280 1280w, /.netlify/images?url=images/corgi.jpg&w=2048 2048w"
-  sizes="(max-width: 1024px) 100vw, 1024px" 
-  alt="Corgi" 
-/>
-~~~
-`;
-
-const devModeWarning = `
-In local development, optimization is performed locally without automatic format
-detection, so format is set to WebP.
-`;
 
 export default function Page() {
     return (
-        <div className="flex flex-col gap-12 sm:gap-16">
-            <section>
-                <ContextAlert
-                    addedChecksFunction={(ctx) => {
-                        return ctx === 'dev' ? devModeWarning : null;
-                    }}
-                    className="mb-6"
-                />
-                <h1>Image CDN</h1>
-            </section>
-            <section>
-                <h2 className="mb-6">Using next/image component</h2>
-                <Markdown content={nextImageSnippet} className="mb-8" />
-                <figure>
-                    <div className="relative overflow-hidden border-2 border-white rounded-lg aspect-3/2">
-                        <Image
-                            src="/images/corgi.jpg"
-                            priority
-                            fill={true}
-                            style={{ objectFit: 'contain' }}
-                            sizes="(max-width: 1024px) 100vw, 1024px"
-                            alt="Corgi"
-                        />
-                    </div>
-                    <figcaption className="mt-2 text-sm italic">
-                        Credit: photo by{' '}
-                        <a href="https://unsplash.com/@alvannee?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-                            Alvan Nee
-                        </a>{' '}
-                        on{' '}
-                        <a href="https://unsplash.com/photos/long-coated-white-and-brown-dog-lvFlpqEvuRM?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">
-                            Unsplash
-                        </a>
-                    </figcaption>
-                </figure>
-            </section>
-            <section>
-                <h2 className="mb-6">Original vs. optimized image: can you tell the difference?</h2>
-                <Markdown content={originalVsCdnSnippet} className="mb-8" />
-                <figure
-                    className="relative grid w-full overflow-hidden border-2 border-white rounded-lg select-none diff aspect-3/2"
-                    tabIndex="0"
-                >
-                    <div className="relative col-start-1 row-start-1 overflow-hidden border-r-2 z-1 border-r-white diff-item-1">
-                        <div>
-                            <ImageWithSizeOverlay src="/images/corgi.jpg" />
-                        </div>
-                    </div>
-                    <div className="relative col-start-1 row-start-1 diff-item-2" tabIndex="0">
-                        <div>
-                            <ImageWithSizeOverlay
-                                srcSet={sampleImageSrcSet}
-                                sizes={sampleImageSrcSet}
-                                overlayPosition="right"
-                            />
-                        </div>
-                    </div>
-                    <div className="relative h-2 col-start-1 row-start-1 overflow-hidden opacity-0 resize-x diff-resizer z-1 min-w-4 cursor-ew-resize top-1/2"></div>
-                </figure>
-            </section>
+        <div className="antialiased text-white bg-blue-900">
+            <div className="flex flex-col min-h-screen px-6 bg-noise sm:px-12">
+                <div className="flex flex-col w-full max-w-5xl mx-auto grow">
+                    <Header className="py-2" />
+                    <main className="grow">
+                        <section className="flex flex-col gap-12 sm:gap-16">
+                            <ContextAlert className="mb-6" />
+                            <h1 className="mb-4 text-2xl font-semibold">
+                                Welcome to GBTS BUILDERS SOLUTION LTD
+                            </h1>
+                            <div className="mb-6">
+                                <Slider />
+                            </div>
+                            <p className="text-lg">
+                                Your one-stop shop for building materials and tools.
+                            </p>
+                            {!!ctx && (
+                                <section className="flex flex-col gap-4">
+                                    <Markdown content={contextExplainer} />
+                                    <RuntimeContextCard />
+                                </section>
+                            )}
+                        </section>
+                    </main>
+                    <Footer className="flex flex-col items-center gap-2" />
+                </div>
+            </div>
         </div>
     );
+}
+
+function Slider() {
+    const images = [
+        '/images/slider1.jpg',
+        '/images/slider2.jpg',
+        '/images/slider3.jpg',
+    ];
+
+    return (
+        <div className="relative w-full max-w-2xl mx-auto">
+            <div className="overflow-hidden rounded shadow-lg">
+                {images.map((src, index) => (
+                    <img
+                        key={index}
+                        src={src}
+                        alt={`Slide ${index + 1}`}
+                        className="w-full"
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function RuntimeContextCard() {
+    const title = `Platform Mode: ${ctx}`;
+    if (ctx === 'dev') {
+        return (
+            <Card title={title}>
+                <p>Browse and test new features for your e-commerce platform seamlessly.</p>
+            </Card>
+        );
+    } else {
+        return (
+            <Card title={title}>
+                <p>Your platform is live and ready to serve customers effectively.</p>
+            </Card>
+        );
+    }
 }
