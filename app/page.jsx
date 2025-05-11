@@ -41,16 +41,12 @@ export default function Page() {
                 <section>
                     <ContextAlert className="mb-6" />
                     <h1 className="mb-4 text-2xl font-semibold">Welcome to GBTS BUILDERS SOLUTION LTD</h1>
-                    <div className="flex flex-col md:flex-row items-center gap-6">
-                        <img
-                            src="/images/welcome.jpg" 
-                            alt="Welcome to GBTS Builders Solution"
-                            className="max-w-full md:max-w-md rounded shadow-lg"
-                        />
-                        <p className="text-lg">
-                            Your one-stop shop for building materials and tools.
-                        </p>
+                    <div className="mb-6">
+                        <Slider />
                     </div>
+                    <p className="text-lg">
+                        Your one-stop shop for building materials and tools.
+                    </p>
                 </section>
                 {!!ctx && (
                     <section className="flex flex-col gap-4">
@@ -66,7 +62,7 @@ export default function Page() {
 
 function Header() {
     return (
-        <header className="bg-gray-800 text-white py-4">
+        <header className="bg-gray-800 text-white py-2">
             <nav className="container mx-auto flex justify-between items-center">
                 <div className="text-lg font-bold">GBTS BUILDERS SOLUTION LTD</div>
                 <ul className="flex gap-4">
@@ -93,7 +89,7 @@ function Header() {
 function Footer() {
     return (
         <footer className="bg-gray-900 text-white py-8">
-            <div className="container mx-auto flex flex-col items-center gap-4">
+            <div className="container mx-auto flex flex-col items-center gap-2">
                 {footerItems.map((item) => (
                     <Link key={item.name} href={item.href} className="hover:underline text-center">
                         {item.name}
@@ -101,6 +97,29 @@ function Footer() {
                 ))}
             </div>
         </footer>
+    );
+}
+
+function Slider() {
+    const images = [
+        '/images/slider1.jpg',
+        '/images/slider2.jpg',
+        '/images/slider3.jpg',
+    ];
+
+    return (
+        <div className="relative w-full max-w-2xl mx-auto">
+            <div className="overflow-hidden rounded shadow-lg">
+                {images.map((src, index) => (
+                    <img
+                        key={index}
+                        src={src}
+                        alt={`Slide ${index + 1}`}
+                        className="w-full"
+                    />
+                ))}
+            </div>
+        </div>
     );
 }
 
@@ -119,4 +138,4 @@ function RuntimeContextCard() {
             </Card>
         );
     }
-            }
+}
