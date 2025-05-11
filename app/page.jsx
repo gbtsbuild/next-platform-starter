@@ -2,66 +2,112 @@ import Link from 'next/link';
 import { Card } from 'components/card';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';
-import { RandomQuote } from 'components/random-quote';
 import { getNetlifyContext } from 'utils';
 
 const contextExplainer = `
-The card below is rendered on the server based on the value of \`process.env.CONTEXT\` 
-([docs](https://docs.netlify.com/configure-builds/environment-variables/#build-metadata)):
+Explore the features of GBTS BUILDERS SOLUTION LTD's e-commerce platform. Easily navigate through our extensive collection of building materials and tools.
 `;
 
-const preDynamicContentExplainer = `
-The card content below is fetched by the client-side from \`/quotes/random\` (see file \`app/quotes/random/route.js\`) with a different quote shown on each page load:
-`;
+const navigationItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'Collections', href: '/collections', submenu: [
+        { name: 'Roofings', href: '/collections/roofings' },
+        { name: 'Doors', href: '/collections/doors' },
+        { name: 'Hand Tools', href: '/collections/hand-tools' },
+        { name: 'Locks & Knobs', href: '/collections/locks-knobs' },
+        { name: 'Security Cameras', href: '/collections/security-cameras' },
+        { name: 'Appliances', href: '/collections/appliances' },
+    ]},
+    { name: 'Track Your Orders', href: '/orders' },
+    { name: 'Blog', href: '/blog' },
+];
 
-const postDynamicContentExplainer = `
-On Netlify, Next.js Route Handlers are automatically deployed as [Serverless Functions](https://docs.netlify.com/functions/overview/).
-Alternatively, you can add Serverless Functions to any site regardless of framework, with acccess to the [full context data](https://docs.netlify.com/functions/api/).
-
-And as always with dynamic content, beware of layout shifts & flicker! (here, we aren't...)
-`;
+const footerItems = [
+    { name: 'About Us', href: '/about' },
+    { name: 'Contact Us', href: '/contact' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Return Policy', href: '/return-policy' },
+    { name: '© 2025 GBTS BUILDERS SOLUTION LTD', href: '#' },
+];
 
 const ctx = getNetlifyContext();
 
 export default function Page() {
     return (
         <div className="flex flex-col gap-12 sm:gap-16">
-            <section>
-                <ContextAlert className="mb-6" />
-                <h1 className="mb-4">Netlify Platform Starter - Next.js</h1>
-                <p className="mb-6 text-lg">Get started with Next.js and Netlify in seconds.</p>
-                <Link href="https://docs.netlify.com/frameworks/next-js/overview/" className="btn btn-lg sm:min-w-64">
-                    Read the Docs
-                </Link>
-            </section>
-            {!!ctx && (
-                <section className="flex flex-col gap-4">
-                    <Markdown content={contextExplainer} />
-                    <RuntimeContextCard />
+            <Header />
+            <main>
+                <section>
+                    <ContextAlert className="mb-6" />
+                    <h1 className="mb-4">Welcome to GBTS BUILDERS SOLUTION LTD</h1>
+                    <p className="mb-6 text-lg">Your one-stop shop for building materials and tools.</p>
                 </section>
-            )}
-            <section className="flex flex-col gap-4">
-                <Markdown content={preDynamicContentExplainer} />
-                <RandomQuote />
-                <Markdown content={postDynamicContentExplainer} />
-            </section>
+                {!!ctx && (
+                    <section className="flex flex-col gap-4">
+                        <Markdown content={contextExplainer} />
+                        <RuntimeContextCard />
+                    </section>
+                )}
+            </main>
+            <Footer />
         </div>
     );
 }
 
+function Header() {
+    return (
+        <header className="bg-gray-800 text-white py-4">
+            <nav className="container mx-auto flex justify-between items-center">
+                <div className="text-lg font-bold">GBTS BUILDERS SOLUTION LTD</div>
+                <ul className="flex gap-4">
+                    {navigationItems.map((item) => (
+                        <li key={item.name} className="relative group">
+                            <Link href={item.href} className="hover:text-yellow-400">{item.name}</Link>
+                            {item.submenu && (
+                                <ul className="absolute bg-white text-black mt-2 rounded shadow-lg hidden group-hover:block">
+                                    {item.submenu.map((subItem) => (
+                                        <li key={subItem.name}>
+                                            <Link href={subItem.href} className="block px-4 py-2 hover:bg-gray-200">{subItem.name}</Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        </header>
+    );
+}
+
+function Footer() {
+    return (
+        <footer className="bg-gray-900 text-white py-8">
+            <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+                {footerItems.map((item) => (
+                    <Link key={item.name} href={item.href} className="hover:underline">
+                        {item.name}
+                    </Link>
+                ))}
+            </div>
+        </footer>
+    );
+}
+
 function RuntimeContextCard() {
-    const title = `Netlify Context: running in ${ctx} mode.`;
+    const title = `Platform Mode: ${ctx}`;
     if (ctx === 'dev') {
         return (
             <Card title={title}>
-                <p>Next.js will rebuild any page you navigate to, including static pages.</p>
+                <p>Browse and test new features for your e-commerce platform seamlessly.</p>
             </Card>
         );
     } else {
         return (
             <Card title={title}>
-                <p>This page was statically-generated at build time.</p>
+                <p>Your platform is live and ready to serve customers effectively.</p>
             </Card>
         );
     }
-}
+     }
