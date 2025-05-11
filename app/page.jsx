@@ -40,8 +40,17 @@ export default function Page() {
             <main>
                 <section>
                     <ContextAlert className="mb-6" />
-                    <h1 className="mb-4">Welcome to GBTS BUILDERS SOLUTION LTD</h1>
-                    <p className="mb-6 text-lg">Your one-stop shop for building materials and tools.</p>
+                    <h1 className="mb-4 text-2xl font-semibold">Welcome to GBTS BUILDERS SOLUTION LTD</h1>
+                    <div className="flex flex-col md:flex-row items-center gap-6">
+                        <img
+                            src="/images/welcome.jpg" 
+                            alt="Welcome to GBTS Builders Solution"
+                            className="max-w-full md:max-w-md rounded shadow-lg"
+                        />
+                        <p className="text-lg">
+                            Your one-stop shop for building materials and tools.
+                        </p>
+                    </div>
                 </section>
                 {!!ctx && (
                     <section className="flex flex-col gap-4">
@@ -84,9 +93,9 @@ function Header() {
 function Footer() {
     return (
         <footer className="bg-gray-900 text-white py-8">
-            <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="container mx-auto flex flex-col items-center gap-4">
                 {footerItems.map((item) => (
-                    <Link key={item.name} href={item.href} className="hover:underline">
+                    <Link key={item.name} href={item.href} className="hover:underline text-center">
                         {item.name}
                     </Link>
                 ))}
@@ -110,4 +119,4 @@ function RuntimeContextCard() {
             </Card>
         );
     }
-     }
+            }
