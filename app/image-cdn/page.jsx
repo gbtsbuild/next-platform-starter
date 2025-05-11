@@ -3,18 +3,23 @@ import { ImageWithSizeOverlay } from './image-with-size-overlay';
 import { ContextAlert } from 'components/context-alert';
 import { Markdown } from 'components/markdown';
 import { getNetlifyContext } from 'utils';
+import Slider from 'components/slider'; // Assuming a slider component is available
 
 export const metadata = {
     title: 'Image CDN'
 };
 
-const sampleImage = '/images/corgi.jpg';
+const sampleImages = [
+    '/images/corgi1.jpg',
+    '/images/corgi2.jpg',
+    '/images/corgi3.jpg',
+];
 
 const ctx = getNetlifyContext();
 const forceWebP = ctx === 'dev';
 const sampleImageSrcSet = [640, 1280, 2048]
     .map((size) => {
-        return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
+        return `/.netlify/images?url=${sampleImages[0]}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
     })
     .join(', ');
 
@@ -67,7 +72,7 @@ export default function Page() {
                 <h2 className="mb-6">Using next/image component</h2>
                 <Markdown content={nextImageSnippet} className="mb-8" />
                 <figure>
-                    <div className="relative overflow-hidden border-2 border-white rounded-lg aspect-3/2">
+                    <div className="relative overflow-hidden border-2 border-white rounded-lg shadow-lg aspect-3/2">
                         <Image
                             src="/images/corgi.jpg"
                             priority
@@ -90,10 +95,14 @@ export default function Page() {
                 </figure>
             </section>
             <section>
+                <h2 className="mb-6">Image Slider</h2>
+                <Slider images={sampleImages} />
+            </section>
+            <section>
                 <h2 className="mb-6">Original vs. optimized image: can you tell the difference?</h2>
                 <Markdown content={originalVsCdnSnippet} className="mb-8" />
                 <figure
-                    className="relative grid w-full overflow-hidden border-2 border-white rounded-lg select-none diff aspect-3/2"
+                    className="relative grid w-full overflow-hidden border-2 border-white rounded-lg select-none diff aspect-3/2 shadow-lg"
                     tabIndex="0"
                 >
                     <div className="relative col-start-1 row-start-1 overflow-hidden border-r-2 z-1 border-r-white diff-item-1">
